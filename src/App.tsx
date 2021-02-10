@@ -7,10 +7,23 @@ import { Button } from 'react-bootstrap';
 //import navbar from './components/navbar';
 import india from './components/Post';
 import Product from './components/Product';
-let array=[
-  {name: 'Akshat Goyal', story:'Good boy '},
-  {name: 'Daksh Garg', story:'Bad Boy'},
-];
+import {render} from 'react-dom';
+import {ApolloProvider, gql, useQuery} from '@apollo/client';
+import {ApolloClient, HttpLink,InMemoryCache} from '@apollo/client';
+
+const client = new ApolloClient({
+    cache: new InMemoryCache(),
+    link: new HttpLink({
+      uri: 'https://demo1103.hasura.app/v1/graphql',
+    }),
+});
+
+
+
+// let array=[
+//   {name: 'Akshat Goyal', story:'Good boy '},
+//   {name: 'Daksh Garg', story:'Bad Boy'},
+// ];
 
 function App() {
   const [name,setName] = useState("");
@@ -25,7 +38,7 @@ function refreshPage() {
         name:name,
         story:description
     }
-    array.push(obj);
+    //array.push(obj);
     refreshPage();
     
       
@@ -33,7 +46,9 @@ function refreshPage() {
   
   return (
     <div>
-    <Post array={array} />
+      <ApolloProvider client={client}>
+    <Post />
+    </ApolloProvider>
     <div className="card">
     <form action="#">
       <p>Enter Name</p>
